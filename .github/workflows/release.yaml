@@ -25,9 +25,9 @@ jobs:
     steps:
     - uses: actions/github-script@v1
       with:
-        github-token: ${{secrets.ALERT_TOKEN}}
+        github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
-          github.repos.createDispatchEvent({
+          github.issues.create({
             owner: context.repo.owner,
             repo: "${{matrix.repos}}",
             title: "Release Alert: ${{ github.event.client_payload.slash_command.name }}",
