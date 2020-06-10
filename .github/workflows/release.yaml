@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         repos:
-        - https://github.com/auerbecklabs/approval-flow-notify
+        - approval-flow-notify
     steps:
     - uses: actions/github-script@v1
       with:
