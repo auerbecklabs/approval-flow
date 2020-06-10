@@ -11,3 +11,8 @@ jobs:
         cat $GITHUB_EVENT_PATH
     - run: |
         echo ${{ github.event.client_payload.slash_command.name }}
+    - uses: peterjgrainger/action-create-branch@v1.0.0
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        branch: ${{ github.event.client_payload.slash_command.name }}
