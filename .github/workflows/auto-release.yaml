@@ -10,8 +10,12 @@ jobs:
     steps:
     - run: |
         cat $GITHUB_EVENT_PATH
+    - run: |
+        echo ::set-output name=membership::$(jq --raw-output '.comment.author_association')
+      id: member_check
     - name: Slash Command Dispatch
       uses: peter-evans/slash-command-dispatch@v1
       with:
         token: ${{ secrets.ALERT_TOKEN }}
         commands: release
+      if: ${{steps.member_check.outputs.membership}} == "MEMBER"
