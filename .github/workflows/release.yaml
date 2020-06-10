@@ -1,0 +1,13 @@
+name: Release Dispatch
+
+on:
+  repository_dispatch:
+    types: [release-command]
+
+
+jobs:
+  label-info:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        cat $GITHUB_EVENT_PATH
