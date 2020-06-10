@@ -10,8 +10,8 @@ jobs:
     steps:
     - run: |
         cat $GITHUB_EVENT_PATH
-      - name: Slash Command Dispatch
-        uses: peter-evans/slash-command-dispatch@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commands: release
+    - name: Slash Command Dispatch
+      uses: peter-evans/slash-command-dispatch@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commands: release
