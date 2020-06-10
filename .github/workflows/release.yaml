@@ -25,7 +25,7 @@ jobs:
     steps:
     - uses: actions/github-script@v1
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
+        github-token: ${{secrets.ALERT_TOKEN}}
         script: |
           github.issues.create({
             owner: context.repo.owner,
