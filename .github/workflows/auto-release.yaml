@@ -13,5 +13,5 @@ jobs:
     - name: Slash Command Dispatch
       uses: peter-evans/slash-command-dispatch@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.ALERT_TOKEN }}
         commands: release
