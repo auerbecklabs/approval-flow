@@ -17,5 +17,6 @@ jobs:
       uses: peter-evans/slash-command-dispatch@v1
       with:
         token: ${{ secrets.ALERT_TOKEN }}
-        commands: release
-      if: ${{steps.member_check.outputs.membership}} == "MEMBER"
+        commands: release, release-rc
+        named-args: true
+#      if: ${{steps.member_check.outputs.membership}} == "MEMBER"
