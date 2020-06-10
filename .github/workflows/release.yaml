@@ -9,6 +9,8 @@ jobs:
     steps:
     - run: |
         cat $GITHUB_EVENT_PATH
+
+  create-release-branch:
     - run: |
         echo ${{ github.event.client_payload.slash_command.name }}
     - uses: peterjgrainger/action-create-branch@v1.0.0
@@ -16,7 +18,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         branch: ${{ github.event.client_payload.slash_command.name }}
-  notify:
+  release-input-notify:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -30,5 +32,6 @@ jobs:
           github.issues.create({
             owner: context.repo.owner,
             repo: "${{matrix.repos}}",
-            title: "Release Alert: ${{ github.event.client_payload.slash_command.name }}",
-          })
+            title: "Release Input Required: ${{ github.event.client_payload.slash_command.name }}",
+            body: "The release process for ${{ github.event.client_payload.slash_command.name }} has begun. Please visit [here](https://github.com) to provide your input."
+          }) 
