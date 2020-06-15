@@ -54,7 +54,7 @@ jobs:
       uses: mikefarah/yq@3.3.2
       with:
         cmd: yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.agnosticv-operator '&agnosticvVersionVersion ${{ github.event.client_payload.slash_command.agnosticv }}'
-   - name: Update Anarchy Operator Release
+    - name: Update Anarchy Operator Release
       if: ${{ github.event.client_payload.slash_command.anarchy != null }}
       uses: mikefarah/yq@3.3.2
       with:
