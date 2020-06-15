@@ -29,17 +29,11 @@ jobs:
     needs: create-release-branch
     steps:
     - uses: actions/checkout@v2
-    - name: Read values
-      uses: docker://mikefarah/yq:3.3.2
-      with:
-        entrypoint: /bin/sh
-        args: /bin/cat $GITHUB_WORKSPACE/values.yaml
     - name: Update Frontend Release
       if: ${{ github.event.client_payload.slash_command.frontend != null }} 
-      uses: docker://mikefarah/yq:3.3.2
+      uses: mikefarah/yq@3.3.2 
       with:
-        entrypoint: /usr/bin/yq
-        args: w $GITHUB_WORKSPACE/values.yaml applicationVersions.frontend hello
+        cmd: w $GITHUB_WORKSPACE/values.yaml applicationVersions.frontend hello
 
 #  release-input-notify:
 #    runs-on: ubuntu-latest
