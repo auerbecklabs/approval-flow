@@ -11,15 +11,25 @@ jobs:
         cat $GITHUB_EVENT_PATH
 
   create-release-branch:
+    if: ${{ github.event.client_payload.slash_command.name }}
     runs-on: ubuntu-latest
     steps:
     - run: |
         echo ${{ github.event.client_payload.slash_command.name }}
+    - run: |
+        echo ::set-output name=release::$(git ls-remote --heads https://github.com/${{ GITHUB_REPOSITORY }} ${{ github.event.client_payload.slash_command.name }}
+      id: rel_check
     - uses: peterjgrainger/action-create-branch@v1.0.0
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         branch: ${{ github.event.client_payload.slash_command.name }}
+      if: ${{ steps.rel_check.outputs.release == "" }}
+    - run: |
+        echo "Release branch ${{ github.event.client_payload.slash_command.name }} already exists. Skipping..."
+      if: ${{ steps.rel_check.outputs.releaes != "" }}
+
+
 #  release-input-notify:
 #    runs-on: ubuntu-latest
 #    strategy:
