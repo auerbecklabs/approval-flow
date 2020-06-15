@@ -33,7 +33,7 @@ jobs:
       if: ${{ github.event.client_payload.slash_command.frontend != null }} 
       uses: mikefarah/yq@3.3.2 
       with:
-        cmd: w $GITHUB_WORKSPACE/values.yaml applicationVersions.frontend ${{ github.event.client_payload.slash_command.frontend }}
+        cmd: yq w $GITHUB_WORKSPACE/values.yaml applicationVersions.frontend ${{ github.event.client_payload.slash_command.frontend }}
 
 #  release-input-notify:
 #    runs-on: ubuntu-latest
