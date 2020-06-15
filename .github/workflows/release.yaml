@@ -19,6 +19,8 @@ jobs:
     - run: |
         echo ::set-output name=release::$(git ls-remote --heads https://github.com/$GITHUB_REPOSITORY ${{ github.event.client_payload.slash_command.name }})
       id: rel_check
+    - run: |
+        echo ${{ steps.rel_check.outputs.release }}
     - uses: peterjgrainger/action-create-branch@v1.0.0
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
