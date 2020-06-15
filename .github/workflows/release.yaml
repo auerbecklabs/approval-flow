@@ -29,7 +29,7 @@ jobs:
       if: ${{ steps.rel_check.outputs.release == null }}
     - run: |
         echo "Release branch ${{ github.event.client_payload.slash_command.name }} already exists. Skipping..."
-      if: ${{ steps.rel_check.outputs.releaes != null }}
+      if: ${{ steps.rel_check.outputs.release != null }}
 
 
 #  release-input-notify:
