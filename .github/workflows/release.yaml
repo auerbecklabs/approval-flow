@@ -20,20 +20,20 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         branch: ${{ github.event.client_payload.slash_command.name }}
-  release-input-notify:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        repos:
-        - approval-flow-notify
-    steps:
-    - uses: actions/github-script@v1
-      with:
-        github-token: ${{secrets.ALERT_TOKEN}}
-        script: |
-          github.issues.create({
-            owner: context.repo.owner,
-            repo: "${{matrix.repos}}",
-            title: "Release Input Required: ${{ github.event.client_payload.slash_command.name }}",
-            body: "The release process for ${{ github.event.client_payload.slash_command.name }} has begun. Please visit [here](https://github.com) to provide your input."
-          }) 
+#  release-input-notify:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        repos:
+#        - approval-flow-notify
+#    steps:
+#    - uses: actions/github-script@v1
+#      with:
+#        github-token: ${{secrets.ALERT_TOKEN}}
+#        script: |
+#          github.issues.create({
+#            owner: context.repo.owner,
+#            repo: "${{matrix.repos}}",
+#            title: "Release Input Required: ${{ github.event.client_payload.slash_command.name }}",
+#            body: "The release process for ${{ github.event.client_payload.slash_command.name }} has begun. Please visit [here](https://github.com) to provide your input."
+#          }) 
