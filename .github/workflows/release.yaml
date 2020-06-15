@@ -4,33 +4,42 @@ on:
   repository_dispatch:
     types: [release-command]
 jobs:
-  release-info:
-    runs-on: ubuntu-latest
-    steps:
-    - run: |
-        cat $GITHUB_EVENT_PATH
-
   create-release-branch:
     if: ${{ github.event.client_payload.slash_command.name }}
     runs-on: ubuntu-latest
     steps:
-    - run: |
-        echo ${{ github.event.client_payload.slash_command.name }}
-    - run: |
+    - name: Check if release branch exists
+      id: release_check
+      run: |
         echo ::set-output name=release::$(git ls-remote --heads https://github.com/$GITHUB_REPOSITORY ${{ github.event.client_payload.slash_command.name }})
-      id: rel_check
-    - run: |
-        echo ${{ steps.rel_check.outputs.release }}
-    - uses: peterjgrainger/action-create-branch@v1.0.0
+    - name: Create release branch
+      uses: peterjgrainger/action-create-branch@v1.0.0
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         branch: ${{ github.event.client_payload.slash_command.name }}
-      if: ${{ steps.rel_check.outputs.release == null }}
-    - run: |
+      if: ${{ steps.release_check.outputs.release == null }}
+    - name: Alert that release already exists
+      run: |
         echo "Release branch ${{ github.event.client_payload.slash_command.name }} already exists. Skipping..."
-      if: ${{ steps.rel_check.outputs.release != null }}
+      if: ${{ steps.release_check.outputs.release != null }}
 
+  update-release-pointers:
+    runs-on: ubuntu-latest
+    needs: create-release-branch
+    steps:
+    - uses: actions/checkout@v2
+    - name: Read values
+      uses: docker://mikefarah/yq:3.3.2
+      with:
+        entrypoint: /bin/sh
+        args: /bin/cat $GITHUB_WORKSPACE/values.yaml
+    - name: Update Frontend Release
+      if: ${{ github.event.client_payload.slash_command.frontend != null }} 
+      uses: docker://mikefarah/yq:3.3.2
+      with:
+        entrypoint: /usr/bin/yq
+        args: w $GITHUB_WORKSPACE/values.yaml applicationVersions.frontend hello
 
 #  release-input-notify:
 #    runs-on: ubuntu-latest
