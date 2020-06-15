@@ -1,0 +1,9 @@
+applicationVersions:
+  frontend: &frontendVersion master
+  backend: &backendVersion master
+  git-api: &gitApiVersion master
+  resource-dispatcher: &resourceDispatcherVersion master
+  agnosticv-operator: &agnosticvVersion helm_chart
+  anarchy-operator: &anarchyVersion helm_chart
+  poolboy: &poolboyVersion helm_chart
+  openshift-acme: &openshiftAcmeVersion 63cf912f507dd7cd060c86e592bd675e8e87374c
