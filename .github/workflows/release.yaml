@@ -24,10 +24,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         branch: ${{ github.event.client_payload.slash_command.name }}
-      if: ${{ steps.rel_check.outputs.release == "" }}
+      if: ${{ steps.rel_check.outputs.release == null }}
     - run: |
         echo "Release branch ${{ github.event.client_payload.slash_command.name }} already exists. Skipping..."
-      if: ${{ steps.rel_check.outputs.releaes != "" }}
+      if: ${{ steps.rel_check.outputs.releaes != null }}
 
 
 #  release-input-notify:
