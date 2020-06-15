@@ -17,7 +17,7 @@ jobs:
     - run: |
         echo ${{ github.event.client_payload.slash_command.name }}
     - run: |
-        echo ::set-output name=release::$(git ls-remote --heads https://github.com/${{ GITHUB_REPOSITORY }} ${{ github.event.client_payload.slash_command.name }}
+        echo ::set-output name=release::$(git ls-remote --heads https://github.com/$GITHUB_REPOSITORY ${{ github.event.client_payload.slash_command.name }}
       id: rel_check
     - uses: peterjgrainger/action-create-branch@v1.0.0
       env: 
