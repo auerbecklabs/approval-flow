@@ -63,7 +63,7 @@ jobs:
       if: ${{ github.event.client_payload.slash_command.poolboy != null }}
       uses: mikefarah/yq@3.3.2
       with:
-        cmd: yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.poolboy &poolboyVersion ${{ github.event.client_payload.slash_command.poolboy }}
+        cmd: "yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.poolboy '&poolboyVersion ${{ github.event.client_payload.slash_command.poolboy }}'"
     - run: |
         cat $GITHUB_WORKSPACE/values.yaml
 
