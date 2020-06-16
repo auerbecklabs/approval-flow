@@ -29,6 +29,8 @@ jobs:
     needs: create-release-branch
     steps:
     - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.client_payload.slash_command.name }}
     - name: Update Frontend Release
       if: ${{ github.event.client_payload.slash_command.frontend != null }} 
       uses: mikefarah/yq@3.3.2 
@@ -69,7 +71,6 @@ jobs:
       with:
         branch: ${{ github.event.client_payload.slash_command.name }}
         commit_message: "Merging changes requested from $(jq .client_payload.github.payload.comment.html_url $GITHUB_EVENT_PATH)"
-        file_pattern: values.yaml
 
 
 #  release-input-notify:
