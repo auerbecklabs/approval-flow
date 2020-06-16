@@ -64,13 +64,11 @@ jobs:
       uses: mikefarah/yq@3.3.2
       with:
         cmd: "yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.poolboy '&poolboyVersion ${{ github.event.client_payload.slash_command.poolboy }}'"
-    - run: |
-        echo $(jq .client_payload.github.payload.comment.html_url $GITHUB_EVENT_PATH)
-#    - name: Commit changes
-#      uses: stefanzweifel/git-auto-commit-action@v4
-#      with:
-#        branch: ${{ github.event.client_payload.slash_command.name }}
-#        commit: "Some useful message"
+    - name: Commit changes
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        branch: ${{ github.event.client_payload.slash_command.name }}
+        commit: "Merging changes requested from $(jq .client_payload.github.payload.comment.html_url $GITHUB_EVENT_PATH)"
         
 
 
