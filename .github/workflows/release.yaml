@@ -65,8 +65,8 @@ jobs:
       with:
         cmd: "yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.poolboy '&poolboyVersion ${{ github.event.client_payload.slash_command.poolboy }}'"
     - run: |
-        echo $GITHUB_EVENT_PATH
-        echo $(jq .comment.html_url)
+        cat $GITHUB_EVENT_PATH
+        echo $(jq .comment.html_url $GITHUB_EVENT_PATH)
 #    - name: Commit changes
 #      uses: stefanzweifel/git-auto-commit-action@v4
 #      with:
