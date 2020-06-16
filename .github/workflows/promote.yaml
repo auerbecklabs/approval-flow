@@ -12,6 +12,9 @@ jobs:
       id: env_var
       run: |
         echo ::set-output name=requestor::$(jq .client_payload.actor $GITHUB_EVENT_PATH)
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.client_payload.slash_command.name }}
     - name: GitHub Pull Request Action
       uses: repo-sync/pull-request@v2.2
       with:
