@@ -28,6 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: create-release-branch
     steps:
+    - name: Get Environment Info
+      id: env
+      run: |
+        echo ::set-output name=comment_url::(jq .client_payload.github.payload.comment.html_url $GITHUB_EVENT_PATH)
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.event.client_payload.slash_command.name }}
@@ -70,7 +74,7 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
         branch: ${{ github.event.client_payload.slash_command.name }}
-        commit_message: "Merging changes requested from $(jq .client_payload.github.payload.comment.html_url $GITHUB_EVENT_PATH)"
+        commit_message: "Merging changes requested from ${{ steps.env.outputs.comment_url }}"
 
 
 #  release-input-notify:
