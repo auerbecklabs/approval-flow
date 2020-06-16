@@ -31,7 +31,7 @@ jobs:
     - name: Get Environment Info
       id: env
       run: |
-        echo ::set-output name=comment_url::(jq .client_payload.github.payload.comment.html_url $GITHUB_EVENT_PATH)
+        echo ::set-output name=comment_url::$(jq .client_payload.github.payload.comment.html_url $GITHUB_EVENT_PATH)
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.event.client_payload.slash_command.name }}
