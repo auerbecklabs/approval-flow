@@ -68,7 +68,7 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
         branch: ${{ github.event.client_payload.slash_command.name }}
-        commit: "Merging changes requested from $(jq .client_payload.github.payload.comment.html_url $GITHUB_EVENT_PATH)"
+        commit_message: "Merging changes requested from $(jq .client_payload.github.payload.comment.html_url $GITHUB_EVENT_PATH)"
         
 
 
