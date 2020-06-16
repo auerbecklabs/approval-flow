@@ -38,35 +38,41 @@ jobs:
       if: ${{ github.event.client_payload.slash_command.backend != null }}
       uses: mikefarah/yq@3.3.2
       with:
-        cmd: yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.backend '&backendVersion ${{ github.event.client_payload.slash_command.backend }}'
+        cmd: "yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.backend '&backendVersion ${{ github.event.client_payload.slash_command.backend }}'"
     - name: Update Git API Release
       if: ${{ github.event.client_payload.slash_command.gitapi != null }}
       uses: mikefarah/yq@3.3.2
       with:
-        cmd: yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.git-api '&gitApiVersion ${{ github.event.client_payload.slash_command.gitapi }}'
+        cmd: "yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.git-api '&gitApiVersion ${{ github.event.client_payload.slash_command.gitapi }}'"
     - name: Update Resource Dispatcher Release
       if: ${{ github.event.client_payload.slash_command.dispatcher != null }}
       uses: mikefarah/yq@3.3.2
       with:
-        cmd: yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.resource-dispatcher '&resourceDispatcherVersion ${{ github.event.client_payload.slash_command.dispatcher }}'
+        cmd: "yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.resource-dispatcher '&resourceDispatcherVersion ${{ github.event.client_payload.slash_command.dispatcher }}'"
     - name: Update AgnosticV Operator Release
       if: ${{ github.event.client_payload.slash_command.agnosticv != null }}
       uses: mikefarah/yq@3.3.2
       with:
-        cmd: yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.agnosticv-operator '&agnosticvVersionVersion ${{ github.event.client_payload.slash_command.agnosticv }}'
+        cmd: "yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.agnosticv-operator '&agnosticvVersionVersion ${{ github.event.client_payload.slash_command.agnosticv }}'"
     - name: Update Anarchy Operator Release
       if: ${{ github.event.client_payload.slash_command.anarchy != null }}
       uses: mikefarah/yq@3.3.2
       with:
-        cmd: yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.anarchy-operator '&anarchyVersion ${{ github.event.client_payload.slash_command.anarchy }}'
+        cmd: "yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.anarchy-operator '&anarchyVersion ${{ github.event.client_payload.slash_command.anarchy }}'"
     - name: Update Poolboy Release
       if: ${{ github.event.client_payload.slash_command.poolboy != null }}
       uses: mikefarah/yq@3.3.2
       with:
         cmd: "yq w -i $GITHUB_WORKSPACE/values.yaml applicationVersions.poolboy '&poolboyVersion ${{ github.event.client_payload.slash_command.poolboy }}'"
     - run: |
-        cat $GITHUB_WORKSPACE/values.yaml
-
+        echo $GITHUB_EVENT_PATH
+        echo $(jq .comment.html_url)
+#    - name: Commit changes
+#      uses: stefanzweifel/git-auto-commit-action@v4
+#      with:
+#        branch: ${{ github.event.client_payload.slash_command.name }}
+#        commit: "Some useful message"
+        
 
 
 #  release-input-notify:
