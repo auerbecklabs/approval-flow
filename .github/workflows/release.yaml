@@ -28,7 +28,7 @@ jobs:
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
-          github.issues.label({
+          github.issues.createLabel({
             owner: context.repo.owner,
             repo: context.repo.repo,
             name: ":package: ${{ github.event.client_payload.slash_command.name }}",
