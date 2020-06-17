@@ -25,6 +25,7 @@ jobs:
       if: ${{ steps.release_check.outputs.release != null }}
     - name: Check if label exists
       uses: actions/github-script@v1
+      id: label_check
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -33,6 +34,8 @@ jobs:
             repo: context.repo.repo,
             name: ":package: ${{ github.event.client_payload.slash_command.name }}"
           })
+    - run: |
+        echo ${{ steps.label_check.outputs.result }}
     - name: Create label to be used for release
       uses: actions/github-script@v1
       with:
