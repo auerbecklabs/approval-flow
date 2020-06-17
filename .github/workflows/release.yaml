@@ -23,6 +23,16 @@ jobs:
       run: |
         echo "Release branch ${{ github.event.client_payload.slash_command.name }} already exists. Skipping..."
       if: ${{ steps.release_check.outputs.release != null }}
+    - name: Check if label exists
+      uses: actions/github-script@v1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.issues.getLabel({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            name: ":package: ${{ github.event.client_payload.slash_command.name }}"
+          })
     - name: Create label to be used for release
       uses: actions/github-script@v1
       with:
@@ -32,7 +42,7 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             name: ":package: ${{ github.event.client_payload.slash_command.name }}",
-            color: "e2b168"
+            color: "2d5893"
           })
 
 
