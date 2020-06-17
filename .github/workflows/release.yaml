@@ -24,7 +24,7 @@ jobs:
         echo "Release branch ${{ github.event.client_payload.slash_command.name }} already exists. Skipping..."
       if: ${{ steps.release_check.outputs.release != null }}
     - name: Create label to be used for release
-    - uses: actions/github-script@v1
+      uses: actions/github-script@v1
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
