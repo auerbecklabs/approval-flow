@@ -32,7 +32,7 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             name: ":package: ${{ github.event.client_payload.slash_command.name }}",
-            color: "f4e79"
+            color: "e2b168"
           })
 
 
