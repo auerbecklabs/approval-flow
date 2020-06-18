@@ -8,14 +8,11 @@ jobs:
     if: ${{ github.event.client_payload.slash_command.name }}
     runs-on: ubuntu-latest
     steps:
-    - run: |
-        cat $GITHUB_EVENT_PATH
-        jq .issue.number $GITHUB_EVENT_PATH
     - name: Get Environment Info
       id: env_info
       run: |
         echo ::set-output name=release::$(git ls-remote --heads https://github.com/$GITHUB_REPOSITORY ${{ github.event.client_payload.slash_command.name }})
-        echo ::set-output name=issuenm::$(jq .issue.number $GITHUB_EVENT_PATH)
+        echo ::set-output name=issuenm::$(jq .client_payload.github.payload.issue.number $GITHUB_EVENT_PATH)
     - name: Create release branch
       uses: peterjgrainger/action-create-branch@v1.0.0
       env: 
