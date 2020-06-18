@@ -58,7 +58,7 @@ jobs:
           github.issues.addLabels({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: ${{steps.env_info.outputs.issuenm}},
+            issue_number: "${{steps.env_info.outputs.issuenm}}",
             labels: "${{github.event.client_payload.slash_command.name }}"
           })
 
