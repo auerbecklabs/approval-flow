@@ -8,6 +8,8 @@ jobs:
     if: ${{ github.event.client_payload.slash_command.env }} && ${{ github.event.client_payload.slash_command.name }}
     runs-on: ubuntu-latest
     steps:
+    - run: |
+        cat $GITHUB_EVENT_PATH
     - name: Set Env Variables
       id: env_info
       run: |
@@ -25,8 +27,12 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         pr_title: "Promoting ${{ github.event.client_payload.slash_command.name }} to ${{ github.event.client_payload.slash_command.env }}"
         pr_body: "Promoting release ${{ github.event.client_payload.slash_command.name }} to the ${{ github.event.client_payload.slash_command.env }} environment as requested by @${{ steps.env_info.outputs.requestor }}."
+    - name: Get PR number
+      id: pr_num
+      run: |
+        echo ::set-output name=prnm::$( echo ${{ steps.create_pr.outputs.pr_url | awk -F'/' '{print $NF}')
     - name: Apply label to issue
-      uses: actions/github-script@v1
+      uses: actions/github-script@v2
       if: ${{ steps.create_pr.outcome == 'success' }}
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
@@ -34,6 +40,6 @@ jobs:
           github.issues.addLabels({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: ${{steps.env_info.outputs.issuenm}},
+            issue_number: ${{steps.pr_num.outputs.prnm}},
             labels: ["${{github.event.client_payload.slash_command.name }}"]
           })
