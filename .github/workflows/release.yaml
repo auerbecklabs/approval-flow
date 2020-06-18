@@ -8,6 +8,9 @@ jobs:
     if: ${{ github.event.client_payload.slash_command.name }}
     runs-on: ubuntu-latest
     steps:
+    - run: |
+        cat $GITHUB_EVENT_PATH
+        jq .issue.number $GITHUB_EVENT_PATH
     - name: Get Environment Info
       id: env_info
       run: |
