@@ -12,7 +12,7 @@ jobs:
       id: env_info
       run: |
         echo ::set-output name=release::$(git ls-remote --heads https://github.com/$GITHUB_REPOSITORY ${{ github.event.client_payload.slash_command.name }})
-        echo ::set-output name=issuenm::$(jq .issue.number)
+        echo ::set-output name=issuenm::$(jq .issue.number $GITHUB_EVENT_PATH)
     - name: Create release branch
       uses: peterjgrainger/action-create-branch@v1.0.0
       env: 
@@ -58,7 +58,7 @@ jobs:
           github.issues.addLabels({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: "${{steps.env_info.outputs.issuenm}}",
+            issue_number: ${{steps.env_info.outputs.issuenm}},
             labels: "${{github.event.client_payload.slash_command.name }}"
           })
 
