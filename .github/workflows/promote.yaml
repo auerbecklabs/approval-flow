@@ -47,7 +47,7 @@ jobs:
         script: |
           octokit.pulls.merge({
             owner: context.repo.owner,
-            repo: context.repo.repo
+            repo: context.repo.repo,
             pull_number: ${{ steps.pr_num.outputs.prnm}},
             merge_method: "squash"
           })
