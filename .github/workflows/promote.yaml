@@ -40,3 +40,14 @@ jobs:
             issue_number: ${{steps.pr_num.outputs.prnm}},
             labels: ["${{github.event.client_payload.slash_command.name }}"]
           })
+    - name: Auto-merge
+      uses: actions/github-script@v2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          octokit.pulls.merge({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+            pull_number: ${{ steps.pr_num.outputs.prnm}},
+            merge_method: "squash"
+          })
