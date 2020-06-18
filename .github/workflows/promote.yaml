@@ -8,13 +8,10 @@ jobs:
     if: ${{ github.event.client_payload.slash_command.env }} && ${{ github.event.client_payload.slash_command.name }}
     runs-on: ubuntu-latest
     steps:
-    - run: |
-        cat $GITHUB_EVENT_PATH
     - name: Set Env Variables
       id: env_info
       run: |
         echo ::set-output name=requestor::$(jq .client_payload.github.actor $GITHUB_EVENT_PATH)
-        echo ::set-output name=issuenm::$(jq .client_payload.github.payload.issue.number $GITHUB_EVENT_PATH)
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.event.client_payload.slash_command.name }}
@@ -30,7 +27,7 @@ jobs:
     - name: Get PR number
       id: pr_num
       run: |
-        echo ::set-output name=prnm::$( echo ${{ steps.create_pr.outputs.pr_url | awk -F'/' '{print $NF}')
+        echo ::set-output name=prnm::$( echo ${{ steps.create_pr.outputs.pr_url }} | awk -F'/' '{print $NF}')
     - name: Apply label to issue
       uses: actions/github-script@v2
       if: ${{ steps.create_pr.outcome == 'success' }}
