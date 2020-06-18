@@ -9,9 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Set Env Variables
-      id: env_var
+      id: env_info
       run: |
         echo ::set-output name=requestor::$(jq .client_payload.github.actor $GITHUB_EVENT_PATH)
+        echo ::set-output name=issuenm::$(jq .client_payload.github.payload.issue.number $GITHUB_EVENT_PATH)
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.event.client_payload.slash_command.name }}
@@ -23,5 +24,15 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         pr_title: "Promoting ${{ github.event.client_payload.slash_command.name }} to ${{ github.event.client_payload.slash_command.env }}"
         pr_body: "Promoting release ${{ github.event.client_payload.slash_command.name }} to the ${{ github.event.client_payload.slash_command.env }} environment as requested by @${{ steps.env_var.outputs.requestor }}."
-
-
+    - name: Apply label to issue
+      uses: actions/github-script@v1
+      if: ${{ steps.create_label.outcome == 'success' }}
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: ${{steps.env_info.outputs.issuenm}},
+            labels: ["${{github.event.client_payload.slash_command.name }}"]
+          })
