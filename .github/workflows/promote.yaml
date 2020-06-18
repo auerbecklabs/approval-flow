@@ -17,16 +17,17 @@ jobs:
       with:
         ref: ${{ github.event.client_payload.slash_command.name }}
     - name: GitHub Pull Request Action
+      id: create_pr
       uses: repo-sync/pull-request@v2.2
       with:
         source_branch: ${{ github.event.client_payload.slash_command.name }}
         destination_branch: ${{ github.event.client_payload.slash_command.env }}
         github_token: ${{ secrets.GITHUB_TOKEN }}
         pr_title: "Promoting ${{ github.event.client_payload.slash_command.name }} to ${{ github.event.client_payload.slash_command.env }}"
-        pr_body: "Promoting release ${{ github.event.client_payload.slash_command.name }} to the ${{ github.event.client_payload.slash_command.env }} environment as requested by @${{ steps.env_var.outputs.requestor }}."
+        pr_body: "Promoting release ${{ github.event.client_payload.slash_command.name }} to the ${{ github.event.client_payload.slash_command.env }} environment as requested by @${{ steps.env_info.outputs.requestor }}."
     - name: Apply label to issue
       uses: actions/github-script@v1
-      if: ${{ steps.create_label.outcome == 'success' }}
+      if: ${{ steps.create_pr.outcome == 'success' }}
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
