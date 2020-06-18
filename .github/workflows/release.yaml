@@ -8,21 +8,22 @@ jobs:
     if: ${{ github.event.client_payload.slash_command.name }}
     runs-on: ubuntu-latest
     steps:
-    - name: Check if release branch exists
-      id: release_check
+    - name: Get Environment Info
+      id: env_info
       run: |
         echo ::set-output name=release::$(git ls-remote --heads https://github.com/$GITHUB_REPOSITORY ${{ github.event.client_payload.slash_command.name }})
+        echo ::set-output name=issuenm::$(jq .issue.number)
     - name: Create release branch
       uses: peterjgrainger/action-create-branch@v1.0.0
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         branch: ${{ github.event.client_payload.slash_command.name }}
-      if: ${{ steps.release_check.outputs.release == null }}
+      if: ${{ steps.env_info.outputs.release == null }}
     - name: Alert that release already exists
       run: |
         echo "Release branch ${{ github.event.client_payload.slash_command.name }} already exists. Skipping..."
-      if: ${{ steps.release_check.outputs.release != null }}
+      if: ${{ steps.env_info.outputs.release != null }}
     - name: Check if label exists
       uses: actions/github-script@v1
       id: label_check
@@ -37,6 +38,7 @@ jobs:
           })
     - name: Create label to be used for release
       uses: actions/github-script@v1
+      id: create_label
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
@@ -47,14 +49,25 @@ jobs:
             color: "2d5893"
           })
       if: ${{ steps.label_check.outcome == 'failure' }}
-
+    - name: Apply label to issue
+      uses: actions/github-script@v1
+      if: ${{ steps.create_label.outcome == 'success' }}
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: ${{steps.env_info.outputs.issuenm}},
+            labels: "${{github.event.client_payload.slash_command.name }}"
+          })
 
   update-release-pointers:
     runs-on: ubuntu-latest
     needs: create-release-branch
     steps:
     - name: Get Environment Info
-      id: env
+      id: env_info
       run: |
         echo ::set-output name=comment_url::$(jq .client_payload.github.payload.comment.html_url $GITHUB_EVENT_PATH)
     - uses: actions/checkout@v2
@@ -99,7 +112,7 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
         branch: ${{ github.event.client_payload.slash_command.name }}
-        commit_message: "Merging changes requested from ${{ steps.env.outputs.comment_url }}"
+        commit_message: "Merging changes requested from ${{ steps.env_info.outputs.comment_url }}"
 
 
 #  release-input-notify:
